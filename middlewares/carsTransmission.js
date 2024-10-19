@@ -28,6 +28,13 @@ exports.validateGetCarsTransmissionbyId = (req, res, next) => {
 exports.validateCreateCarsTransmission = (req, res, next) => {
     const validateBody = z.object({
         type: z.string(),
+        number_of_gears: z.string().transform((val) => {
+            const parsed = parseInt(val, 10);
+            if (isNaN(parsed)) {
+                throw new Error('Octan rating must be a valid integer');
+            }
+            return parsed;
+        }),
     });
 
     // Validate
@@ -51,6 +58,13 @@ exports.validateUpdateCarsTransmission = (req, res, next) => {
     }
     const validateBody = z.object({
         type: z.string(),
+        number_of_gears: z.string().transform((val) => {
+            const parsed = parseInt(val, 10);
+            if (isNaN(parsed)) {
+                throw new Error('Octan rating must be a valid integer');
+            }
+            return parsed;
+        }),
     });
 
     const resultValidateBody = validateBody.safeParse(req.body);
