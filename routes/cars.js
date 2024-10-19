@@ -1,6 +1,6 @@
 const express = require('express');
-const { validateGetCarbyId, validateCreateCar, validateUpdateCar, validateDeleteCarbyId, checkCarExists, errorHandler } = require('./middlewares/cars');
-const { getCarById, createCar, updateCar, deleteCarById } = require('./cars');
+const { validateGetCarbyId, validateCreateCar, validateUpdateCar, validateDeleteCarbyId, checkCarExists, errorHandler } = require('../middlewares/cars');
+const { getCarById, createCar, updateCar, deleteCarById } = require('../controllers/cars');
 const router = express.Router();
 
 router.get('/:id', validateGetCarbyId, checkCarExists, async (req, res, next) => {

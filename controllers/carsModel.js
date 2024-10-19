@@ -1,4 +1,4 @@
-const modelsService = require("../services/modelsService");
+const modelsService = require("../services/carsModel");
 const { validationResult } = require("express-validator");
 
 exports.getModelById = async (req, res, next) => {
