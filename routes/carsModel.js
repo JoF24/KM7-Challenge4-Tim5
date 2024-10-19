@@ -10,7 +10,7 @@ const {
 const { getModelById, createModel, updateModel, deleteModelById } = require('../controllers/modelsController');
 const router = express.Router();
 
-router.get('/models/:id', validateGetModelById, checkModelExists, async (req, res, next) => {
+router.get('/:id', validateGetModelById, checkModelExists, async (req, res, next) => {
     try {
         const model = await getModelById(req, res, next);
         res.json(model);
@@ -19,7 +19,7 @@ router.get('/models/:id', validateGetModelById, checkModelExists, async (req, re
     }
 });
 
-router.post('/models', validateCreateModel, async (req, res, next) => {
+router.post('/', validateCreateModel, async (req, res, next) => {
     try {
         const newModel = await createModel(req, res, next);
         res.status(201).json(newModel);
@@ -28,7 +28,7 @@ router.post('/models', validateCreateModel, async (req, res, next) => {
     }
 });
 
-router.put('/models/:id', validateUpdateModel, checkModelExists, async (req, res, next) => {
+router.put('/:id', validateUpdateModel, checkModelExists, async (req, res, next) => {
     try {
         const updatedModel = await updateModel(req, res, next);
         res.json(updatedModel);
@@ -37,7 +37,7 @@ router.put('/models/:id', validateUpdateModel, checkModelExists, async (req, res
     }
 });
 
-router.delete('/models/:id', validateDeleteModelById, checkModelExists, async (req, res, next) => {
+router.delete('/:id', validateDeleteModelById, checkModelExists, async (req, res, next) => {
     try {
         await deleteModelById(req, res, next);
         res.status(204).end();
