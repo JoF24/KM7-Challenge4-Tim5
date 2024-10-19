@@ -1,4 +1,4 @@
-const modelsRepository = require("../repositories/models");
+const modelsRepository = require("../repositories/carsModel");
 const {
     NotFoundError,
     InternalServerError,

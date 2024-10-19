@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { getCarById } = require('./cars');
+const { getCarById } = require('../controllers/cars');
 const { NotFoundError } = require('../utils/request');
 
 const carIdSchema = z.number({

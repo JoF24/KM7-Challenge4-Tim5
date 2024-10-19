@@ -6,8 +6,8 @@ const {
     validateDeleteModelById, 
     checkModelExists, 
     errorHandler 
-} = require('./middlewares/models');
-const { getModelById, createModel, updateModel, deleteModelById } = require('../controllers/modelsController');
+} = require('../middlewares/carsModel');
+const { getModelById, createModel, updateModel, deleteModelById } = require('../controllers/carsModel');
 const router = express.Router();
 
 router.get('/:id', validateGetModelById, checkModelExists, async (req, res, next) => {

@@ -28,6 +28,9 @@ exports.getCarsFuelbyId = async (id) => {
 
 exports.createCarsFuel = async (data) => {
     const largestIdCarsFuel = await prisma.Fuel.findFirst({
+        orderBy: {
+            id: 'desc',
+        },
         select: {
             id: true,
         },
