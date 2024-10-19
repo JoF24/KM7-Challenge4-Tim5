@@ -3,7 +3,7 @@ const { validateGetCarbyId, validateCreateCar, validateUpdateCar, validateDelete
 const { getCarById, createCar, updateCar, deleteCarById } = require('./cars');
 const router = express.Router();
 
-router.get('/cars/:id', validateGetCarbyId, checkCarExists, async (req, res, next) => {
+router.get('/:id', validateGetCarbyId, checkCarExists, async (req, res, next) => {
     try {
         const car = await getCarById(req.params.id);
         res.json(car);
@@ -12,7 +12,7 @@ router.get('/cars/:id', validateGetCarbyId, checkCarExists, async (req, res, nex
     }
 });
 
-router.post('/cars', validateCreateCar, async (req, res, next) => {
+router.post('/', validateCreateCar, async (req, res, next) => {
     try {
         const newCar = await createCar(req.body);
         res.status(201).json(newCar);
@@ -21,7 +21,7 @@ router.post('/cars', validateCreateCar, async (req, res, next) => {
     }
 });
 
-router.put('/cars/:id', validateUpdateCar, checkCarExists, async (req, res, next) => {
+router.put('/:id', validateUpdateCar, checkCarExists, async (req, res, next) => {
     try {
         const updatedCar = await updateCar(req.params.id, req.body);
         res.json(updatedCar);
@@ -30,7 +30,7 @@ router.put('/cars/:id', validateUpdateCar, checkCarExists, async (req, res, next
     }
 });
 
-router.delete('/cars/:id', validateDeleteCarbyId, checkCarExists, async (req, res, next) => {
+router.delete('/:id', validateDeleteCarbyId, checkCarExists, async (req, res, next) => {
     try {
         await deleteCarById(req.params.id);
         res.status(204).end();
