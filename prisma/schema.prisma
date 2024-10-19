@@ -10,8 +10,8 @@ datasource db {
 model Fuel {
   id           BigInt @id @default(autoincrement())
   type         String @db.VarChar(50)
-  price        Float
-  octan_rating Int
+  price        String @db.VarChar
+  octan_rating String @db.VarChar
   cars         cars[]
 }
 

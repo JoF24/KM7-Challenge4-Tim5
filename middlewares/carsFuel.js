@@ -1,10 +1,9 @@
 const { z } = require("zod");
 const { BadRequestError } = require("../utils/request");
 
-exports.validateGetCarsManufacture = (req, res, next) => {
+exports.validateGetCarsFuel = (req, res, next) => {
     const validateQuery = z.object({
-        manufacture: z.string().optional().nullable(),
-        address: z.string().optional().nullable(),
+        type: z.string().optional().nullable(),
     });
 
     const resultValidateQuery = validateQuery.safeParse(req.query);
@@ -15,7 +14,7 @@ exports.validateGetCarsManufacture = (req, res, next) => {
     next();
 }
 
-exports.validateGetCarsManufacturebyId = (req, res, next) => {
+exports.validateGetCarsFuelbyId = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });
@@ -26,10 +25,9 @@ exports.validateGetCarsManufacturebyId = (req, res, next) => {
     next();
 };
 
-exports.validateCreateCarsManufacture = (req, res, next) => {
+exports.validateCreateCarsFuel = (req, res, next) => {
     const validateBody = z.object({
-        manufacture : z.string(),
-        address : z.string(),
+        type: z.string(),
     });
 
     // Validate
@@ -42,7 +40,7 @@ exports.validateCreateCarsManufacture = (req, res, next) => {
     next();
 };
 
-exports.validateUpdateCarsManufacture = (req, res, next) => {
+exports.validateUpdateCarsFuel = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });
@@ -52,8 +50,7 @@ exports.validateUpdateCarsManufacture = (req, res, next) => {
         throw new BadRequestError(resultValidateParams.error.errors);
     }
     const validateBody = z.object({
-        manufacture : z.string(),
-        address : z.string(),
+        type: z.string(),
     });
 
     const resultValidateBody = validateBody.safeParse(req.body);
@@ -65,7 +62,7 @@ exports.validateUpdateCarsManufacture = (req, res, next) => {
     next();
 };
 
-exports.validateDeleteCarsManufacturebyId = (req, res, next) => {
+exports.validateDeleteCarsFuelbyId = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });

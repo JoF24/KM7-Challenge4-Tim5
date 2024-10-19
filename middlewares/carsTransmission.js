@@ -1,8 +1,20 @@
 const { z } = require("zod");
 const { BadRequestError } = require("../utils/request");
 
+exports.validateGetCarsTransmission = (req, res, next) => {
+    const validateQuery = z.object({
+        type: z.string().optional().nullable(),
+    });
 
-exports.validateGetCarsTypebyId = (req, res, next) => {
+    const resultValidateQuery = validateQuery.safeParse(req.query);
+    if (!resultValidateQuery.success) {
+        throw new BadRequestError(resultValidateQuery.error.errors);
+    }
+
+    next();
+}
+
+exports.validateGetCarsTransmissionbyId = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });
@@ -13,10 +25,9 @@ exports.validateGetCarsTypebyId = (req, res, next) => {
     next();
 };
 
-exports.validateCreateCarsType = (req, res, next) => {
+exports.validateCreateCarsTransmission = (req, res, next) => {
     const validateBody = z.object({
-        type : z.string(),
-        description : z.string(),
+        type: z.string(),
     });
 
     // Validate
@@ -29,7 +40,7 @@ exports.validateCreateCarsType = (req, res, next) => {
     next();
 };
 
-exports.validateUpdateCarsType = (req, res, next) => {
+exports.validateUpdateCarsTransmission = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });
@@ -39,8 +50,7 @@ exports.validateUpdateCarsType = (req, res, next) => {
         throw new BadRequestError(resultValidateParams.error.errors);
     }
     const validateBody = z.object({
-        type : z.string(),
-        description : z.string(),
+        type: z.string(),
     });
 
     const resultValidateBody = validateBody.safeParse(req.body);
@@ -52,7 +62,7 @@ exports.validateUpdateCarsType = (req, res, next) => {
     next();
 };
 
-exports.validateDeleteCarsTypebyId = (req, res, next) => {
+exports.validateDeleteCarsTransmissionbyId = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });

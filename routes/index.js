@@ -1,10 +1,10 @@
 const express = require("express");
-const carsTypeRouter = require("./carsType");
-const carsManufactureRouter = require("./carsManufacture");
+const carsFuelRouter = require("./carsFuel");
+const carsTransmissionRouter = require("./carsTransmission");
 
 const router = express.Router();
 
-router.use("/carsType", carsTypeRouter);
-router.use("/carsManufacture", carsManufactureRouter);
+router.use("/carsFuel", carsFuelRouter);
+router.use("/carsTransmission", carsTransmissionRouter);
 
 module.exports = router;
