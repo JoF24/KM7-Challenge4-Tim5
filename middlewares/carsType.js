@@ -1,6 +1,19 @@
 const { z } = require("zod");
 const { BadRequestError } = require("../utils/request");
 
+exports.validateGetCarsType = (req, res, next) => {
+    const validateQuery = z.object({
+        type: z.string().optional().nullable(),
+        description: z.string().optional().nullable(),
+    });
+
+    const resultValidateQuery = validateQuery.safeParse(req.query);
+    if (!resultValidateQuery.success) {
+        throw new BadRequestError(resultValidateQuery.error.errors);
+    }
+
+    next();
+}
 
 exports.validateGetCarsTypebyId = (req, res, next) => {
     const validateParams = z.object({
