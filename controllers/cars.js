@@ -1,7 +1,6 @@
 const carsService = require("../services/cars");
 const { validationResult } = require("express-validator");
 
-// Controller for getting a car by ID
 exports.getCarById = async (req, res, next) => {
     try {
         const id = parseInt(req.params.id);
@@ -12,7 +11,6 @@ exports.getCarById = async (req, res, next) => {
     }
 };
 
-// Controller for creating a new car
 exports.createCar = async (req, res, next) => {
     try {
         // Handling validation errors
@@ -29,7 +27,6 @@ exports.createCar = async (req, res, next) => {
     }
 };
 
-// Controller for updating a car by ID
 exports.updateCar = async (req, res, next) => {
     try {
         const id = parseInt(req.params.id);
@@ -42,7 +39,6 @@ exports.updateCar = async (req, res, next) => {
     }
 };
 
-// Controller for deleting a car by ID
 exports.deleteCarById = async (req, res, next) => {
     try {
         const id = parseInt(req.params.id);
