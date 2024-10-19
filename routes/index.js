@@ -4,6 +4,8 @@ const carsManufactureRouter = require("./carsManufacture");
 
 const router = express.Router();
 
+router.use("/cars", carsRouter);
+router.use("/carsModel", carsModelRouter);
 router.use("/carsType", carsTypeRouter);
 router.use("/carsManufacture", carsManufactureRouter);
 
