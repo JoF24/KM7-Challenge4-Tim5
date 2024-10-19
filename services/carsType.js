@@ -4,6 +4,10 @@ const {
     InternalServerError,
 } = require("../utils/request");
 
+exports.getCarsType = async (type, description) => {
+    return carsTypeRepository.getCarsType(type, description);
+}
+
 exports.getCarsTypebyId = (id) => {
     const cars = carsTypeRepository.getCarsTypebyId(id);
     if (!cars) {

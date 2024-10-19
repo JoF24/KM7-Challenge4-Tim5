@@ -1,10 +1,10 @@
 const { z } = require("zod");
 const { BadRequestError } = require("../utils/request");
 
-exports.validateGetCarsType = (req, res, next) => {
+exports.validateGetCarsManufacture = (req, res, next) => {
     const validateQuery = z.object({
-        type: z.string().optional().nullable(),
-        description: z.string().optional().nullable(),
+        manufacture: z.string().optional().nullable(),
+        address: z.string().optional().nullable(),
     });
 
     const resultValidateQuery = validateQuery.safeParse(req.query);
@@ -15,7 +15,7 @@ exports.validateGetCarsType = (req, res, next) => {
     next();
 }
 
-exports.validateGetCarsTypebyId = (req, res, next) => {
+exports.validateGetCarsManufacturebyId = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });
@@ -26,10 +26,10 @@ exports.validateGetCarsTypebyId = (req, res, next) => {
     next();
 };
 
-exports.validateCreateCarsType = (req, res, next) => {
+exports.validateCreateCarsManufacture = (req, res, next) => {
     const validateBody = z.object({
-        type : z.string(),
-        description : z.string(),
+        manufacture : z.string(),
+        address : z.string(),
     });
 
     // Validate
@@ -42,7 +42,7 @@ exports.validateCreateCarsType = (req, res, next) => {
     next();
 };
 
-exports.validateUpdateCarsType = (req, res, next) => {
+exports.validateUpdateCarsManufacture = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });
@@ -52,8 +52,8 @@ exports.validateUpdateCarsType = (req, res, next) => {
         throw new BadRequestError(resultValidateParams.error.errors);
     }
     const validateBody = z.object({
-        type : z.string(),
-        description : z.string(),
+        manufacture : z.string(),
+        address : z.string(),
     });
 
     const resultValidateBody = validateBody.safeParse(req.body);
@@ -65,7 +65,7 @@ exports.validateUpdateCarsType = (req, res, next) => {
     next();
 };
 
-exports.validateDeleteCarsTypebyId = (req, res, next) => {
+exports.validateDeleteCarsManufacturebyId = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });
