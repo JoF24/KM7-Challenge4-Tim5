@@ -52,7 +52,7 @@ model cars {
   rentPerDay      Int
   capacity        Int
   description     String?
-  availableAt     DateTime      @db.Date
+  availableAt     String
   transmission_id BigInt?
   available       Boolean
   type_id         BigInt?
