@@ -3,7 +3,9 @@ const { successResponse } = require("../utils/response");
 
 exports.getCarsFuel = async (req, res, next) => {
     const data = await carsFuelService.getCarsFuel(
-        req.query?.type
+        req.query?.type,
+        req.query?.price,
+        req.query?.octan_rating
     );
     successResponse(res, data);
 }

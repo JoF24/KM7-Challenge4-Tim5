@@ -4,8 +4,8 @@ const {
     InternalServerError,
 } = require("../utils/request");
 
-exports.getCarsFuel = async (type) => {
-    return carsFuelRepository.getCarsFuel(type);
+exports.getCarsFuel = async (type, price, octan_rating) => {
+    return carsFuelRepository.getCarsFuel(type, price, octan_rating);
 }
 
 exports.getCarsFuelbyId = (id) => {

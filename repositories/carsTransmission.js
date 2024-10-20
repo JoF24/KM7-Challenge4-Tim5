@@ -4,10 +4,12 @@ const { NotFoundError } = require("../utils/request");
 
 const prisma = new PrismaClient();
 
-exports.getCarsTransmission = async (type) => {
+exports.getCarsTransmission = async (type, number_of_gears) => {
+    const parsedNumberOfGears = number_of_gears ? parseInt(number_of_gears, 10) : undefined;
     const searchedCarsTransmission = await prisma.Transmission.findMany({
         where: {
             type: type,
+            ...(parsedNumberOfGears && {number_of_gears: parsedNumberOfGears})
         }
     });
 
@@ -21,7 +23,6 @@ exports.getCarsTransmissionbyId = async (id) => {
             id: id,
         }
     });
-
     const serializedCarsTransmission = JSONBigInt.stringify(searchedCarsTransmissionbyId);
     return JSONBigInt.parse(serializedCarsTransmission);
 };
