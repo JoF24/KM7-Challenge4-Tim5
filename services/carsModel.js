@@ -1,54 +1,54 @@
-const modelsRepository = require("../repositories/models");
+const carsModelRepository = require("../repositories/carsModel");
 const {
-    NotFoundError,
+    NotFoundError, 
     InternalServerError,
 } = require("../utils/request");
 
-exports.getModelById = async (id) => {
-    const model = await modelsRepository.getModelById(id);
-    if (!model) {
-        throw new NotFoundError("Model is Not Found!");
+exports.getCarsModel = async (type, year) => {
+    return carsModelRepository.getCarsModel(type, year);
+}
+
+exports.getCarModelbyId = (id) => {
+    const cars = carsModelRepository.getCarModelbyId(id);
+    if (!cars) {
+        throw new NotFoundError("Cars Model is Not Found!");
     }
-    return model;
+    return cars;
 };
 
-exports.createModel = async (data) => {
-    try {
-        return await modelsRepository.createModel(data);
-    } catch (error) {
-        throw new InternalServerError("Failed to create Model!");
-    }
+exports.createCarModel = async (data) => {
+    return carsModelRepository.createCarModel(data);
 };
 
-exports.updateModel = async (id, data) => {
-    const existingModel = await modelsRepository.getModelById(id);
-    if (!existingModel) {
-        throw new NotFoundError("Model is Not Found!");
+exports.updateCarModel = async (id, data) => {
+    const existingCarsModel = carsModelRepository.getCarModelbyId(id);
+    if (!existingCarsModel) {
+        throw new NotFoundError("Cars Model is Not Found!");
     }
 
     data = {
-        ...existingModel,
+        ...existingCarsModel,
         ...data,
     };
 
-    const updatedModel = await modelsRepository.updateModel(id, data);
-    if (!updatedModel) {
-        throw new InternalServerError("Failed to update Model!");
+    const updatedCarModel = carsModelRepository.updateCarModel(id, data);
+    if (!updatedCarModel) {
+        throw new InternalServerError(["Failed to update Cars Model!"]);
     }
 
-    return updatedModel;
+    return updatedCarsManufacture;
 };
 
-exports.deleteModelById = async (id) => {
-    const existingModel = await modelsRepository.getModelById(id);
-    if (!existingModel) {
-        throw new NotFoundError("Model is Not Found!");
+exports.deleteCarModelbyId = (id) => {
+    const existingCarsModel = carsModelRepository.getCarModelbyId(id);
+    if (!existingCarsModel) {
+        throw new NotFoundError("Cars Model is Not Found!");
     }
 
-    const deletedModel = await modelsRepository.deleteModelById(id);
-    if (!deletedModel) {
-        throw new InternalServerError("Failed to delete Model!");
+    const deletedCarModel = carsModelRepository.deleteCarModelbyId(id);
+    if (!deletedCarModel) {
+        throw new InternalServerError(["Failed to delete Cars Model!"]);
     }
 
-    return deletedModel;
+    return deletedCarModel;
 };
