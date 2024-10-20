@@ -139,10 +139,12 @@ exports.validateUpdateCar = (req, res, next) => {
         throw new BadRequestError(result.error.errors);
     };
 
-    const resultValidateFile = validateFileBody.safeParse(req.files);
-    if (!resultValidateFile.success) {
-        throw new BadRequestError(resultValidateFile.error.errors);
-    };
+    if(req.files){
+        const resultValidateFile = validateFileBody.safeParse(req.files);
+        if (!resultValidateFile.success) {
+            throw new BadRequestError(resultValidateFile.error.errors);
+        };
+    }
 
     next();
 };

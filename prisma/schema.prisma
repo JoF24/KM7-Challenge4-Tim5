@@ -44,7 +44,7 @@ model Type {
 }
 
 model cars {
-  id              Int           @id @default(autoincrement())
+  id              String        @id @db.Uuid
   plate           String        @db.VarChar(20)
   manufacture_id  BigInt?
   model_id        BigInt?
