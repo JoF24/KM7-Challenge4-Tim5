@@ -27,9 +27,13 @@ exports.validateGetCarModelbyId = (req, res, next) => {
 };
 
 exports.validateCreateCarModel = (req, res, next) => {
+    req.body = {
+        ...req.body,
+        year : parseInt(req.body.year),
+    };
     const validateBody = z.object({
         type: z.string(),
-        year: z.string(),
+        year: z.number(),
     });
 
     const result = validateBody.safeParse(req.body);
@@ -49,9 +53,13 @@ exports.validateUpdateCarModel = (req, res, next) => {
     if (!resultValidateParams.success) {
         throw new BadRequestError(resultValidateParams.error.errors);
     }
+    req.body = {
+        ...req.body,
+        year : parseInt(req.body.year),
+    };
     const validateBody = z.object({
         type: z.string(),
-        year: z.string(),
+        year: z.number(),
     });
 
     const resultValidateBody = validateBody.safeParse(req.body);

@@ -1,4 +1,5 @@
 const carsRepository = require("../repositories/cars");
+const {imageUpload} = require("../utils/image-kit");
 const {
     NotFoundError, 
     InternalServerError,
@@ -9,14 +10,17 @@ exports.getAllCars = async (plate, manufacture_id, model_id, rentPerDay, capacit
 }
 
 exports.getCarById = (id) => {
-    const cars = carsRepository.getCarById(id);
+    const cars = carsRepository.getCarbyId(id);
     if (!cars) {
         throw new NotFoundError("Car is Not Found!");
     }
     return cars;
 };
 
-exports.createCar = async (data) => {
+exports.createCar = async (data, file) => {
+    if(file?.image){
+        data.image = await imageUpload(file.image)
+    }     
     return carsRepository.createCar(data);
 };
 

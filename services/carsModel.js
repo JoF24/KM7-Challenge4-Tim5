@@ -36,7 +36,7 @@ exports.updateCarModel = async (id, data) => {
         throw new InternalServerError(["Failed to update Cars Model!"]);
     }
 
-    return updatedModel;
+    return updatedCarModel;
 };
 
 exports.deleteCarModelbyId = (id) => {
