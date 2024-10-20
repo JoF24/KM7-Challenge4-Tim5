@@ -1,86 +1,160 @@
 const { z } = require('zod');
-const { getCarById } = require('./cars');
-const { NotFoundError } = require('../utils/request');
+const { BadRequestError } = require('../utils/request');
 
-const carIdSchema = z.number({
-    required_error: "Car ID is required",
-    invalid_type_error: "Car ID must be a number"
-}).positive().int();
+exports.validateGetAllCars = (req, res, next) => {
+    const validateQuery = z.object({
+        plate : z.string(). optional(). nullable(),
+        manufacture_id : z.string(). optional(). nullable(),
+        model_id : z.string(). optional(). nullable(),
+        rentPerDay : z.number(). optional(). nullable(),
+        capacity : z.number(). optional(). nullable(),
+        description : z.string(). optional(). nullable(),
+        availableAt : z.string(). optional(). nullable(),
+        transmission_id : z.string(). optional(). nullable(),
+        available : z.boolean(). optional(). nullable(),
+        type_id : z.string(). optional(). nullable(),
+        year : z.number(). optional(). nullable(),
+        options : z.array(z.string()). optional(). nullable(),
+        specs : z.array(z.string()). optional(). nullable(),
+        fuel_id : z.string(). optional(). nullable(),
+    });
 
-const carCreateSchema = z.object({
-    plate: z.string().min(1, "Plate is required").max(20, "Plate must not exceed 20 characters"),
-    rentPerDay: z.number({ required_error: "Rent per day is required" }).positive("Rent per day must be a positive number"),
-    capacity: z.number({ required_error: "Capacity is required" }).positive("Capacity must be a positive number"),
-    availableAt: z.string({ required_error: "AvailableAt is required" }).refine((date) => !isNaN(Date.parse(date)), "AvailableAt must be a valid date"),
-    available: z.boolean({ required_error: "Available status is required" }),
-    year: z.number({ required_error: "Year is required" }).int().min(1886, "Year must be greater than 1886"),
-    manufacture_id: z.bigint().optional(),
-    model_id: z.bigint().optional(),
-    image: z.string().optional(),
-    description: z.string().optional(),
-    transmission_id: z.bigint().optional(),
-    type_id: z.bigint().optional(),
-    options: z.any().optional(),
-    specs: z.any().optional(),
-    fuel_id: z.bigint().optional()
-});
+    const resultValidateQuery = validateQuery.safeParse(req.query);
+    if (!resultValidateQuery.success) {
+        throw new BadRequestError(resultValidateQuery.error.errors);
+    }
 
-const carUpdateSchema = carCreateSchema.partial();
+    next();
+}
 
 exports.validateGetCarbyId = (req, res, next) => {
-    const id = parseInt(req.params.id);
-    try {
-        carIdSchema.parse(id); // Parse and validate the ID for getting car
-        next();
-    } catch (error) {
-        return res.status(400).json({ errors: error.errors });
-    }
+    const validateParams = z.object({
+        id: z.string(),
+    });
+    const result = validateParams.safeParse(req.params);
+    if (!result.success) {
+        throw new BadRequestError(result.error.errors);
+    } 
+    next();
 };
 
 exports.validateCreateCar = (req, res, next) => {
-    try {
-        carCreateSchema.parse(req.body); // Parse and validate the request body for car creation
-        next();
-    } catch (error) {
-        return res.status(400).json({ errors: error.errors });
+    req.body ={
+        ...req.body,
+        rentPerDay : parseInt(req.body.rentPerDay),
+        capacity : parseInt(req.body.capacity),
+        available : req.body.available === 'true',
+        year : parseInt(req.body.year),
+        options : JSON.parse(req.body.options),
+        specs : JSON.parse(req.body.specs),
     }
+
+    const validateBody = z.object({
+        plate : z.string(),
+        manufacture_id : z.string(),
+        model_id : z.string(),
+        rentPerDay : z.number(),
+        capacity : z.number(),
+        description : z.string(),
+        availableAt : z.string(),
+        transmission_id : z.string(),
+        available : z.boolean(),
+        type_id : z.string(),
+        year : z.number(),
+        options : z.array(z.string()),
+        specs : z.array(z.string()),
+        fuel_id : z.string(),
+    });
+
+    const validateFileBody = z.object({
+        image: z.object({
+            name : z.string(),
+            data : z.any(),
+        })
+        .nullable()
+        .optional()
+    });
+
+    const result = validateBody.safeParse(req.body);
+    if (!result.success) {
+        throw new BadRequestError(result.error.errors);
+    };
+
+    const resultValidateFile = validateFileBody.safeParse(req.files);
+    if (!resultValidateFile.success) {
+        throw new BadRequestError(resultValidateFile.error.errors);
+    };
+
+    next();
 };
 
 exports.validateUpdateCar = (req, res, next) => {
-    try {
-        carUpdateSchema.parse(req.body); // Parse and validate the request body for car update
-        next();
-    } catch (error) {
-        return res.status(400).json({ errors: error.errors });
+    const validateParams = z.object({
+        id: z.string(),
+    });
+
+    const resultValidateParams = validateParams.safeParse(req.params);
+    if (!resultValidateParams.success) {
+        throw new BadRequestError(resultValidateParams.error.errors);
     }
+
+    req.body ={
+        ...req.body,
+        rentPerDay : parseInt(req.body.rentPerDay),
+        capacity : parseInt(req.body.capacity),
+        available : req.body.available === 'true',
+        year : parseInt(req.body.year),
+        options : JSON.parse(req.body.options),
+        specs : JSON.parse(req.body.specs),
+    }
+
+    const validateBody = z.object({
+        plate : z.string(),
+        manufacture_id : z.string(),
+        model_id : z.string(),
+        rentPerDay : z.number(),
+        capacity : z.number(),
+        description : z.string(),
+        availableAt : z.string(),
+        transmission_id : z.string(),
+        available : z.boolean(),
+        type_id : z.string(),
+        year : z.number(),
+        options : z.array(z.string()),
+        specs : z.array(z.string()),
+        fuel_id : z.string(),
+    });
+
+    const validateFileBody = z.object({
+        image: z.object({
+            name : z.string(),
+            data : z.any(),
+        })
+        .nullable()
+        .optional(),
+    });
+
+    const result = validateBody.safeParse(req.body);
+    if (!result.success) {
+        throw new BadRequestError(result.error.errors);
+    };
+
+    const resultValidateFile = validateFileBody.safeParse(req.files);
+    if (!resultValidateFile.success) {
+        throw new BadRequestError(resultValidateFile.error.errors);
+    };
+
+    next();
 };
 
 exports.validateDeleteCarbyId = (req, res, next) => {
-    const id = parseInt(req.params.id);
-    try {
-        carIdSchema.parse(id); // Parse and validate the ID for car deletion
-        next();
-    } catch (error) {
-        return res.status(400).json({ errors: error.errors });
-    }
-};
+    const validateParams = z.object({
+        id: z.string(),
+    });
 
-exports.checkCarExists = async (req, res, next) => {
-    const carId = parseInt(req.params.id);
-    try {
-        const car = await getCarById(carId);
-        if (!car) {
-            throw new NotFoundError("Car not found");
-        }
-        next();
-    } catch (error) {
-        return res.status(404).json({ message: error.message });
-    }
-};
-
-exports.errorHandler = (err, req, res, next) => {
-    if (err.name === 'NotFoundError') {
-        return res.status(404).json({ message: err.message });
-    }
-    res.status(500).json({ message: 'An unexpected error occurred' });
+    const result = validateParams.safeParse(req.params);
+    if (!result.success) {
+        throw new BadRequestError(result.error.errors);
+    };
+    next();
 };
