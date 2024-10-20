@@ -3,7 +3,7 @@ const { successResponse } = require("../utils/response");
 
 exports.getCarbyId = async (req, res, next) => {
     const { id } = req.params;
-    const data = await carsService.getCarbyId(id);
+    const data = await carsService.getCarById(id);
     successResponse(res, data);
 };
 

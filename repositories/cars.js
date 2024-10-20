@@ -21,7 +21,7 @@ exports.getAllCars = async (plate, manufacture_id, model_id, rentPerDay, capacit
             options : options,
             specs : specs,
             fuel_id : fuel_id
-        }
+        },
     });
 
     const serializedCars = JSONBigInt.stringify(searchedCars);

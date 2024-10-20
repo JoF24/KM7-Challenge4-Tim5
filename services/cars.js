@@ -8,8 +8,8 @@ exports.getAllCars = async (plate, manufacture_id, model_id, rentPerDay, capacit
     return carsRepository.getAllCars(plate, manufacture_id, model_id, rentPerDay, capacity, description, availableAt, transmission_id, available,type_id, year, options, specs, fuel_id);
 }
 
-exports.getCarbyId = (id) => {
-    const cars = carsRepository.getCarbyId(id);
+exports.getCarById = (id) => {
+    const cars = carsRepository.getCarById(id);
     if (!cars) {
         throw new NotFoundError("Car is Not Found!");
     }
