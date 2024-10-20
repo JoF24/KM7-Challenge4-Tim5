@@ -4,16 +4,21 @@ const { NotFoundError } = require("../utils/request");
 
 const prisma = new PrismaClient();
 
-exports.getCarsFuel = async (type) => {
+exports.getCarsFuel = async (type, price, octan_rating) => {
+    const parsedPrice = price ? parseFloat(price) : undefined;
+    const parsedOctanRating = octan_rating ? parseInt(octan_rating, 10) : undefined;
+
     const searchedCarsFuel = await prisma.Fuel.findMany({
         where: {
-            type: type,
+            ...(type && { type: { contains: type, mode: 'insensitive' } }),
+            ...(parsedPrice && { price: parsedPrice }),
+            ...(parsedOctanRating && { octan_rating: parsedOctanRating })
         }
     });
 
     const serializedCarsFuel = JSONBigInt.stringify(searchedCarsFuel);
     return JSONBigInt.parse(serializedCarsFuel);
-}
+};
 
 exports.getCarsFuelbyId = async (id) => {
     const searchedCarsFuelbyId = await prisma.Fuel.findUnique({
@@ -29,7 +34,7 @@ exports.getCarsFuelbyId = async (id) => {
 exports.createCarsFuel = async (data) => {
     const largestIdCarsFuel = await prisma.Fuel.findFirst({
         orderBy: {
-            id: 'desc',
+            id: 'desc', 
         },
         select: {
             id: true,
