@@ -43,8 +43,6 @@ exports.createCarModel = async (data) => {
     const new_car = {
         ...data, 
         id: newId.toString(),
-        type: type,
-        year: year
     };
  
     const newCarModel = await prisma.Model.create({

@@ -1,44 +1,71 @@
 const { PrismaClient } = require("@prisma/client");
 const JSONBigInt = require("json-bigint");
 const { NotFoundError } = require("../utils/request");
+const { v4: uuidv4 } = require('uuid');
 
 const prisma = new PrismaClient();
 
 exports.getAllCars = async (plate, manufacture_id, model_id, rentPerDay, capacity, description, availableAt, transmission_id, available,type_id, year, options, specs, fuel_id) => {
-    const searchedCars = await prisma.cars.findMany({
-        where: {
-            plate : plate,
-            manufacture_id : manufacture_id,
-            model_id : model_id,
-            rentPerDay : rentPerDay,
-            capacity : capacity,
-            description : description,
-            availableAt : availableAt,
-            transmission_id : transmission_id,
-            available : available,
-            type_id : type_id,
-            year : year,
-            options : options,
-            specs : specs,
-            fuel_id : fuel_id
-        }
-    });
+    let query = {
+        include: {
+            Manufacture: true,
+            Model: true,
+            Transmission: true,
+            Type: true,
+            Fuel: true,
+        },
+    };
+
+    let orQuery = [];
+    if (manufacture_id) {
+        orQuery.push({
+            manufacture: { contains: manufacture_id, mode: "insensitive" },
+        });
+    }
+    if (model_id) {
+        orQuery.push({
+            model: { contains: model_id, mode: "insensitive" },
+        });
+    }
+    if (transmission_id) {
+        orQuery.push({
+            transmission: { contains: transmission_id, mode: "insensitive" },
+        });
+    }
+    if (type_id) {
+        orQuery.push({
+            type: { contains: type_id, mode: "insensitive" },
+        });
+    }
+    if (fuel_id) {
+        orQuery.push({
+            fuel: { contains: fuel_id, mode: "insensitive" },
+        });
+    }
+
+    if (orQuery.length > 0) {
+        query.where = {
+            ...query.where,
+            OR: orQuery,
+        };
+    }
+    const searchedCars = await prisma.cars.findMany(query);
 
     const serializedCars = JSONBigInt.stringify(searchedCars);
     return JSONBigInt.parse(serializedCars);
 }
 
 exports.getCarbyId = async (id) => {
-    const searchedCarbyId = await prisma.cars.findUnique({
+    const searchedCarbyId = await prisma.cars.findFirst({
         where: {
             id: id,
         },
         include: {
-            manufacture: true,
-            model: true,
-            transmission: true,
-            type: true,
-            fuel: true,
+            Manufacture: true,
+            Model: true,
+            Transmission: true,
+            Type: true,
+            Fuel: true,
         },
     });
 
@@ -51,21 +78,20 @@ exports.getCarbyId = async (id) => {
 };
 
 exports.createCar = async (data) => {
-    const largestIdCar = await prisma.cars.findFirst({
-        select: {
-            id: true,
-        },
-    });
-
-    const newId = largestIdCar ? BigInt(largestIdCar.id) + BigInt(1) : BigInt(1);
-
     const newCarData = {
+        id: uuidv4(),
         ...data,
-        id: newId.toString(),
     };
 
     const newCar = await prisma.cars.create({
         data: newCarData,
+        include: {
+            Manufacture: true,
+            Model: true,
+            Transmission: true,
+            Type: true,
+            Fuel: true,
+        },
     });
 
     const serializedCar = JSONBigInt.stringify(newCar);
@@ -105,6 +131,13 @@ exports.updateCar = async (id, data) => {
         where: { 
             id: id,
         },
+        include: {
+            Manufacture: true,
+            Model: true,
+            Transmission: true,
+            Type: true,
+            Fuel: true,
+        },
         data: updatedData,
     });
 
@@ -126,6 +159,13 @@ exports.deleteCarbyId = async (id) => {
     const deletedCar = await prisma.cars.delete({
         where: { 
             id: id, 
+        },
+        include: {
+            Manufacture: true,
+            Model: true,
+            Transmission: true,
+            Type: true,
+            Fuel: true,
         },
     });
 
