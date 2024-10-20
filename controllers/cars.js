@@ -1,51 +1,45 @@
 const carsService = require("../services/cars");
-const { validationResult } = require("express-validator");
+const { successResponse } = require("../utils/response");
 
-exports.getCarById = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-        const car = await carsService.getCarById(id);
-        return res.status(200).json(car);
-    } catch (error) {
-        next(error);
-    }
+exports.getCarbyId = async (req, res, next) => {
+    const { id } = req.params;
+    const data = await carsService.getCarbyId(id);
+    successResponse(res, data);
+};
+
+exports.getAllCars = async (req, res, next) => {
+    const data = await carsService.getAllCars(
+        req.query?.plate,
+        req.query?.manufacture_id,
+        req.query?.model_id,
+        req.query?.rentPerDay,
+        req.query?.capacity,
+        req.query?.description,
+        req.query?.availableAt,
+        req.query?.transmission_id,
+        req.query?.available,
+        req.query?.type_id,
+        req.query?.year,
+        req.query?.options,
+        req.query?.specs,
+        req.query?.fuel_id
+    );
+    successResponse(res, data);
 };
 
 exports.createCar = async (req, res, next) => {
-    try {
-        // Handling validation errors
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        const carData = req.body;
-        const newCar = await carsService.createCar(carData);
-        return res.status(201).json(newCar);
-    } catch (error) {
-        next(error);
-    }
+    const data = await carsService.createCar(req.body, req.files);
+    successResponse(res, data);
 };
 
 exports.updateCar = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-        const carData = req.body;
-
-        const updatedCar = await carsService.updateCar(id, carData);
-        return res.status(200).json(updatedCar);
-    } catch (error) {
-        next(error);
-    }
+    const { id } = req.params;
+    const data = await carsService.updateCar(id, req.body, req.files);
+    successResponse(res, data);
 };
 
-exports.deleteCarById = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-
-        await carsService.deleteCarById(id);
-        return res.status(204).send(); // 204 No Content for successful deletion
-    } catch (error) {
-        next(error);
-    }
+exports.deleteCarbyId = async (req, res, next) => {
+    const { id } = req.params;
+    const data = await carsService.deleteCarbyId(id);
+    successResponse(res, data);
 };

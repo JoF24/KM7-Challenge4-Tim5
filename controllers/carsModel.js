@@ -1,4 +1,4 @@
-const carsFuelService = require("../services/carsModel");
+const carsModelService = require("../services/carsModel");
 const { successResponse } = require("../utils/response");
 
 exports.getCarsModel = async (req, res, next) => {
