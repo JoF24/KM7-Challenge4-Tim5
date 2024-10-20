@@ -4,90 +4,101 @@ const { NotFoundError } = require("../utils/request");
 
 const prisma = new PrismaClient();
 
-exports.getModelById = async (id) => {
-    const searchedModelById = await prisma.model.findUnique({
+exports.getCarsModel = async (type, year) => {
+    const searchedCarsModel = await prisma.Model.findMany({
         where: {
-            id: id,
-        },
+            type: type,
+            year: year
+        }
     });
 
-    if (!searchedModelById) {
-        throw new NotFoundError("Model not found in the database!");
-    }
+    const serializedCarsModel = JSONBigInt.stringify(searchedCarsModel);
+    return JSONBigInt.parse(serializedCarsModel);
+}
 
-    const serializedModel = JSONBigInt.stringify(searchedModelById);
-    return JSONBigInt.parse(serializedModel);
+exports.getCarModelbyId = async (id) => {
+    const searchedCarModelbyId = await prisma.Model.findUnique({
+        where :{
+            id : id,
+        }
+    });
+
+    const serializedCarsModel = JSONBigInt.stringify(searchedCarModelbyId);
+    return JSONBigInt.parse(serializedCarsModel);
 };
 
-exports.createModel = async (data) => {
-    const largestIdModel = await prisma.model.findFirst({
-        select: {
-            id: true,
-        },
+exports.createCarModel = async (data) => {
+    const largestIdCarsModel = await prisma.Model.findFirst({
         orderBy: {
             id: 'desc',
         },
+        select: {
+            id: true,
+        },
     });
+    
+    const newId = largestIdCarsModel ? BigInt(largestIdCarsModel.id) + BigInt(1) : BigInt(1);
 
-    const newId = largestIdModel ? BigInt(largestIdModel.id) + BigInt(1) : BigInt(1);
-
-    const newModelData = {
-        ...data,
+     
+    const new_car = {
+        ...data, 
         id: newId.toString(),
+        type: type,
+        year: year
     };
-
-    const newModel = await prisma.model.create({
-        data: newModelData,
+ 
+    const newCarModel = await prisma.Model.create({
+        data: new_car,
     });
 
-    const serializedModel = JSONBigInt.stringify(newModel);
-    return JSONBigInt.parse(serializedModel);
+    const serializedCarsModel = JSONBigInt.stringify(newCarModel);
+    return JSONBigInt.parse(serializedCarsModel);
 };
 
-exports.updateModel = async (id, data) => {
-    const existingModel = await prisma.model.findFirst({
+exports.updateCarModel = async(id, data) => {
+    const existingCarModel = await prisma.Model.findFirst({
         where: { 
             id: id,
         },
     });
 
-    if (!existingModel) {
-        throw new NotFoundError("Model not found in the database!");
+    if (!existingCarModel) {
+        throw new NotFoundError("Car Model is Not Found in the database!");
     }
 
     const updatedData = {
-        type: data.type || existingModel.type,
-        year: data.year || existingModel.year,
+        type : data.type || existingCarModel.type,
+        year : data.year || existingCarModel.year,
     };
 
-    const updatedModel = await prisma.model.update({
+    const updatedCarModel = await prisma.Model.update({
         where: { 
-            id: id,
+            id: id, 
         },
         data: updatedData,
     });
 
-    const serializedModel = JSONBigInt.stringify(updatedModel);
-    return JSONBigInt.parse(serializedModel);
+    const serializedCarsModel = JSONBigInt.stringify(updatedCarModel);
+    return JSONBigInt.parse(serializedCarsModel);
 };
 
-exports.deleteModelById = async (id) => {
-    const existingModel = await prisma.model.findFirst({
+exports.deleteCarModelbyId = async (id) => {
+    const existingCarModel = await prisma.Model.findFirst({
         where: { 
             id: id, 
         },
     });
 
-    if (!existingModel) {
-        throw new NotFoundError("Model not found in the database!");
+    if (!existingCarModel) {
+        throw new NotFoundError("Cars Model is Not Found in the database!");
     }
 
-    const deletedModel = await prisma.model.delete({
+    const deletedCarModel = await prisma.Model.delete({
         where: { 
             id: id, 
         },
     });
 
-    const serializedModel = JSONBigInt.stringify(deletedModel);
-    return JSONBigInt.parse(serializedModel);
+    const serializedCarsModel = JSONBigInt.stringify(deletedCarModel);
+    return JSONBigInt.parse(serializedCarsModel);
 };

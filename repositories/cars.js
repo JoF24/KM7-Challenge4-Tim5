@@ -8,7 +8,14 @@ exports.getCarById = async (id) => {
     const searchedCarById = await prisma.cars.findUnique({
         where: {
             id: id,
-        }
+        },
+        include: {
+            manufacture: true,
+            model: true,
+            transmission: true,
+            type: true,
+            fuel: true,
+        },
     });
 
     if (!searchedCarById) {

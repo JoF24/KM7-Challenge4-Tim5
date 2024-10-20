@@ -1,50 +1,32 @@
-const modelsService = require("../services/carsModel");
-const { validationResult } = require("express-validator");
+const carsFuelService = require("../services/carsModel");
+const { successResponse } = require("../utils/response");
 
-exports.getModelById = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-        const model = await modelsService.getModelById(id);
-        return res.status(200).json(model);
-    } catch (error) {
-        next(error);
-    }
+exports.getCarsModel = async (req, res, next) => {
+    const data = await carsModelService.getCarsModel(
+        req.query?.type
+    );
+    successResponse(res, data);
+}
+
+exports.getCarModelbyId = async (req, res, next) => {
+    const { id } = req.params;
+    const data = await carsFuelService.getCarModelbyId(id);
+    successResponse(res, data);
 };
 
-exports.createModel = async (req, res, next) => {
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        const modelData = req.body;
-        const newModel = await modelsService.createModel(modelData);
-        return res.status(201).json(newModel);
-    } catch (error) {
-        next(error);
-    }
+exports.createCarModel = async (req, res, next) => {
+    const data = await carsModelService.createCarModel(req.body);
+    successResponse(res, data);
 };
 
-exports.updateModel = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-        const modelData = req.body;
-
-        const updatedModel = await modelsService.updateModel(id, modelData);
-        return res.status(200).json(updatedModel);
-    } catch (error) {
-        next(error);
-    }
+exports.updateCarMode = async (req, res, next) => {
+    const { id } = req.params;
+    const data = await carsModelService.updateCarModel(id, req.body);
+    successResponse(res, data);
 };
 
-exports.deleteModelById = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-
-        await modelsService.deleteModelById(id);
-        return res.status(204).send();
-    } catch (error) {
-        next(error);
-    }
+exports.deleteCarModelbyId = async (req, res, next) => {
+    const { id } = req.params;
+    const data = await carsModelService.deleteCarModelbyId(id);
+    successResponse(res, data);
 };

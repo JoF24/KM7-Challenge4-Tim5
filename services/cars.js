@@ -4,26 +4,26 @@ const {
     InternalServerError,
 } = require("../utils/request");
 
-exports.getCarById = async (id) => {
-    const car = await carsRepository.getCarById(id);
-    if (!car) {
+exports.getCars = async (type) => {
+    return carsRepository.getCars(type);
+}
+
+exports.getCarbyId = (id) => {
+    const cars = carsRepository.getCarbyId(id);
+    if (!cars) {
         throw new NotFoundError("Car is Not Found!");
     }
-    return car;
+    return cars;
 };
 
 exports.createCar = async (data) => {
-    try {
-        return await carsRepository.createCar(data);
-    } catch (error) {
-        throw new InternalServerError("Failed to create Car!");
-    }
+    return carsRepository.createCar(data);
 };
 
 exports.updateCar = async (id, data) => {
-    const existingCar = await carsRepository.getCarById(id);
+    const existingCar = carsRepository.getCarbyId(id);
     if (!existingCar) {
-        throw new NotFoundError("Car is Not Found!");
+        throw new NotFoundError("Cars is Not Found!");
     }
 
     data = {
@@ -31,23 +31,23 @@ exports.updateCar = async (id, data) => {
         ...data,
     };
 
-    const updatedCar = await carsRepository.updateCar(id, data);
+    const updatedCar = carsRepository.updateCar(id, data);
     if (!updatedCar) {
-        throw new InternalServerError("Failed to update Car!");
+        throw new InternalServerError(["Failed to update Car!"]);
     }
 
     return updatedCar;
 };
 
-exports.deleteCarById = async (id) => {
-    const existingCar = await carsRepository.getCarById(id);
+exports.deleteCarbyId = (id) => {
+    const existingCar = carsRepository.getCarbyId(id);
     if (!existingCar) {
         throw new NotFoundError("Car is Not Found!");
     }
 
-    const deletedCar = await carsRepository.deleteCarById(id);
+    const deletedCar = carsRepository.deleteCarbyId(id);
     if (!deletedCar) {
-        throw new InternalServerError("Failed to delete Car!");
+        throw new InternalServerError(["Failed to delete Car!"]);
     }
 
     return deletedCar;

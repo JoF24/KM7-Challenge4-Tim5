@@ -1,51 +1,30 @@
 const carsService = require("../services/cars");
-const { validationResult } = require("express-validator");
+const { successResponse } = require("../utils/response");
 
-exports.getCarById = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-        const car = await carsService.getCarById(id);
-        return res.status(200).json(car);
-    } catch (error) {
-        next(error);
-    }
+exports.getCarsbyId = async (req, res, next) => {
+    const { id } = req.params;
+    const data = await carsService.getCarsbyId(id);
+    successResponse(res, data);
 };
 
-exports.createCar = async (req, res, next) => {
-    try {
-        // Handling validation errors
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        const carData = req.body;
-        const newCar = await carsService.createCar(carData);
-        return res.status(201).json(newCar);
-    } catch (error) {
-        next(error);
-    }
+exports.getCars = async (req, res, next) => {
+    const data = await carsService.getAllCars();
+    successResponse(res, data);
 };
 
-exports.updateCar = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-        const carData = req.body;
-
-        const updatedCar = await carsService.updateCar(id, carData);
-        return res.status(200).json(updatedCar);
-    } catch (error) {
-        next(error);
-    }
+exports.createCars = async (req, res, next) => {
+    const data = await carsService.createCars(req.body, req.files);
+    successResponse(res, data);
 };
 
-exports.deleteCarById = async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
+exports.updateCars = async (req, res, next) => {
+    const { id } = req.params;
+    const data = await carsService.updateCars(id, req.body, req.files);
+    successResponse(res, data);
+};
 
-        await carsService.deleteCarById(id);
-        return res.status(204).send(); // 204 No Content for successful deletion
-    } catch (error) {
-        next(error);
-    }
+exports.deleteCarsbyId = async (req, res, next) => {
+    const { id } = req.params;
+    const data = await carsService.deleteCarsbyId(id);
+    successResponse(res, data);
 };
