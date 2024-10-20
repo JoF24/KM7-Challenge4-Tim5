@@ -28,14 +28,26 @@ exports.validateGetCarsFuelbyId = (req, res, next) => {
 exports.validateCreateCarsFuel = (req, res, next) => {
     const validateBody = z.object({
         type: z.string(),
+        price: z.string().transform((val) => {
+            const parsed = parseFloat(val);
+            if (isNaN(parsed)) {
+                throw new Error('Price must be a valid number');
+            }
+            return parsed;
+        }),
+        octan_rating: z.string().transform((val) => {
+            const parsed = parseInt(val, 10);
+            if (isNaN(parsed)) {
+                throw new Error('Octan rating must be a valid integer');
+            }
+            return parsed;
+        }),
     });
 
-    // Validate
     const result = validateBody.safeParse(req.body);
     if (!result.success) {
-        // If validation fails, return error messages
         throw new BadRequestError(result.error.errors);
-    };
+    }
 
     next();
 };
@@ -51,11 +63,24 @@ exports.validateUpdateCarsFuel = (req, res, next) => {
     }
     const validateBody = z.object({
         type: z.string(),
+        price: z.string().transform((val) => {
+            const parsed = parseFloat(val);
+            if (isNaN(parsed)) {
+                throw new Error('Price must be a valid number');
+            }
+            return parsed;
+        }),
+        octan_rating: z.string().transform((val) => {
+            const parsed = parseInt(val, 10);
+            if (isNaN(parsed)) {
+                throw new Error('Octan rating must be a valid integer');
+            }
+            return parsed;
+        }),
     });
 
     const resultValidateBody = validateBody.safeParse(req.body);
     if (!resultValidateBody.success) {
-        // If validation fails, return error messages
         throw new BadRequestError(resultValidateBody.error.errors);
     };
 
