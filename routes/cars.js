@@ -1,13 +1,13 @@
 const express = require('express');
 const { 
-    validateGetCars,
+    validateGetAllCars,
     validateGetCarbyId, 
     validateCreateCar, 
     validateUpdateCar, 
     validateDeleteCarbyId
 } = require('../middlewares/cars');
 const { 
-    getCars,
+    getAllCars,
     getCarbyId, 
     createCar, 
     updateCar, 
@@ -15,7 +15,7 @@ const {
 } = require('../controllers/cars');
 const router = express.Router();
 
-router.get("/", validateGetCars, getCars);
+router.get("/", validateGetAllCars, getAllCars);
 router.post("/", validateCreateCar, createCar);
 router.get('/:id', validateGetCarbyId, getCarbyId);
 router.put("/:id", validateUpdateCar, updateCar);

@@ -4,8 +4,8 @@ const {
     InternalServerError,
 } = require("../utils/request");
 
-exports.getCars = async (type) => {
-    return carsRepository.getCars(type);
+exports.getAllCars = async (plate, manufacture_id, model_id, rentPerDay, capacity, description, availableAt, transmission_id, available,type_id, year, options, specs, fuel_id) => {
+    return carsRepository.getAllCars(plate, manufacture_id, model_id, rentPerDay, capacity, description, availableAt, transmission_id, available,type_id, year, options, specs, fuel_id);
 }
 
 exports.getCarbyId = (id) => {

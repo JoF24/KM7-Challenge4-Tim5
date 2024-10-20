@@ -4,8 +4,32 @@ const { NotFoundError } = require("../utils/request");
 
 const prisma = new PrismaClient();
 
-exports.getCarById = async (id) => {
-    const searchedCarById = await prisma.cars.findUnique({
+exports.getAllCars = async (plate, manufacture_id, model_id, rentPerDay, capacity, description, availableAt, transmission_id, available,type_id, year, options, specs, fuel_id) => {
+    const searchedCars = await prisma.cars.findMany({
+        where: {
+            plate : plate,
+            manufacture_id : manufacture_id,
+            model_id : model_id,
+            rentPerDay : rentPerDay,
+            capacity : capacity,
+            description : description,
+            availableAt : availableAt,
+            transmission_id : transmission_id,
+            available : available,
+            type_id : type_id,
+            year : year,
+            options : options,
+            specs : specs,
+            fuel_id : fuel_id
+        }
+    });
+
+    const serializedCars = JSONBigInt.stringify(searchedCars);
+    return JSONBigInt.parse(serializedCars);
+}
+
+exports.getCarbyId = async (id) => {
+    const searchedCarbyId = await prisma.cars.findUnique({
         where: {
             id: id,
         },
@@ -18,11 +42,11 @@ exports.getCarById = async (id) => {
         },
     });
 
-    if (!searchedCarById) {
+    if (!searchedCarbyId) {
         throw new NotFoundError("Car not found in the database!");
     }
 
-    const serializedCar = JSONBigInt.stringify(searchedCarById);
+    const serializedCar = JSONBigInt.stringify(searchedCarbyId);
     return JSONBigInt.parse(serializedCar);
 };
 
@@ -88,7 +112,7 @@ exports.updateCar = async (id, data) => {
     return JSONBigInt.parse(serializedCar);
 };
 
-exports.deleteCarById = async (id) => {
+exports.deleteCarbyId = async (id) => {
     const existingCar = await prisma.cars.findFirst({
         where: { 
             id: id, 

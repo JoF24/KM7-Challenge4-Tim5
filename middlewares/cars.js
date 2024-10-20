@@ -1,7 +1,33 @@
 const { z } = require('zod');
-const { NotFoundError } = require('../utils/request');
+const { BadRequestError } = require('../utils/request');
 
-exports.validateGetCarsbyId = (req, res, next) => {
+exports.validateGetAllCars = (req, res, next) => {
+    const validateQuery = z.object({
+        plate : z.string(). optional(). nullable(),
+        manufacture_id : z.string(). optional(). nullable(),
+        model_id : z.string(). optional(). nullable(),
+        rentPerDay : z.number(). optional(). nullable(),
+        capacity : z.number(). optional(). nullable(),
+        description : z.string(). optional(). nullable(),
+        availableAt : z.string(). optional(). nullable(),
+        transmission_id : z.string(). optional(). nullable(),
+        available : z.boolean(). optional(). nullable(),
+        type_id : z.string(). optional(). nullable(),
+        year : z.number(). optional(). nullable(),
+        options : z.array(z.string()). optional(). nullable(),
+        specs : z.array(z.string()). optional(). nullable(),
+        fuel_id : z.string(). optional(). nullable(),
+    });
+
+    const resultValidateQuery = validateQuery.safeParse(req.query);
+    if (!resultValidateQuery.success) {
+        throw new BadRequestError(resultValidateQuery.error.errors);
+    }
+
+    next();
+}
+
+exports.validateGetCarbyId = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });
@@ -12,7 +38,7 @@ exports.validateGetCarsbyId = (req, res, next) => {
     next();
 };
 
-exports.validateCreateCars = (req, res, next) => {
+exports.validateCreateCar = (req, res, next) => {
     req.body ={
         ...req.body,
         rentPerDay : parseInt(req.body.rentPerDay),
@@ -44,9 +70,9 @@ exports.validateCreateCars = (req, res, next) => {
         image: z.object({
             name : z.string(),
             data : z.any(),
-        }),
+        })
         .nullable()
-        .optional(),
+        .optional()
     });
 
     const result = validateBody.safeParse(req.body);
@@ -103,7 +129,7 @@ exports.validateUpdateCar = (req, res, next) => {
         image: z.object({
             name : z.string(),
             data : z.any(),
-        }),
+        })
         .nullable()
         .optional(),
     });
@@ -121,7 +147,7 @@ exports.validateUpdateCar = (req, res, next) => {
     next();
 };
 
-exports.validateDeleteCarsbyId = (req, res, next) => {
+exports.validateDeleteCarbyId = (req, res, next) => {
     const validateParams = z.object({
         id: z.string(),
     });

@@ -10,7 +10,7 @@ exports.getCarsModel = async (req, res, next) => {
 
 exports.getCarModelbyId = async (req, res, next) => {
     const { id } = req.params;
-    const data = await carsFuelService.getCarModelbyId(id);
+    const data = await carsModelService.getCarModelbyId(id);
     successResponse(res, data);
 };
 
@@ -19,7 +19,7 @@ exports.createCarModel = async (req, res, next) => {
     successResponse(res, data);
 };
 
-exports.updateCarMode = async (req, res, next) => {
+exports.updateCarModel = async (req, res, next) => {
     const { id } = req.params;
     const data = await carsModelService.updateCarModel(id, req.body);
     successResponse(res, data);

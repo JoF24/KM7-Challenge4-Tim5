@@ -1,30 +1,45 @@
 const carsService = require("../services/cars");
 const { successResponse } = require("../utils/response");
 
-exports.getCarsbyId = async (req, res, next) => {
+exports.getCarbyId = async (req, res, next) => {
     const { id } = req.params;
-    const data = await carsService.getCarsbyId(id);
+    const data = await carsService.getCarbyId(id);
     successResponse(res, data);
 };
 
-exports.getCars = async (req, res, next) => {
-    const data = await carsService.getAllCars();
+exports.getAllCars = async (req, res, next) => {
+    const data = await carsService.getAllCars(
+        req.query?.plate,
+        req.query?.manufacture_id,
+        req.query?.model_id,
+        req.query?.rentPerDay,
+        req.query?.capacity,
+        req.query?.description,
+        req.query?.availableAt,
+        req.query?.transmission_id,
+        req.query?.available,
+        req.query?.type_id,
+        req.query?.year,
+        req.query?.options,
+        req.query?.specs,
+        req.query?.fuel_id
+    );
     successResponse(res, data);
 };
 
-exports.createCars = async (req, res, next) => {
-    const data = await carsService.createCars(req.body, req.files);
+exports.createCar = async (req, res, next) => {
+    const data = await carsService.createCar(req.body, req.files);
     successResponse(res, data);
 };
 
-exports.updateCars = async (req, res, next) => {
+exports.updateCar = async (req, res, next) => {
     const { id } = req.params;
-    const data = await carsService.updateCars(id, req.body, req.files);
+    const data = await carsService.updateCar(id, req.body, req.files);
     successResponse(res, data);
 };
 
-exports.deleteCarsbyId = async (req, res, next) => {
+exports.deleteCarbyId = async (req, res, next) => {
     const { id } = req.params;
-    const data = await carsService.deleteCarsbyId(id);
+    const data = await carsService.deleteCarbyId(id);
     successResponse(res, data);
 };
