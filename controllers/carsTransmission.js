@@ -3,7 +3,8 @@ const { successResponse } = require("../utils/response");
 
 exports.getCarsTransmission = async (req, res, next) => {
     const data = await carsTransmissionService.getCarsTransmission(
-        req.query?.type
+        req.query?.type,
+        req.query?.number_of_gears
     );
     successResponse(res, data);
 }

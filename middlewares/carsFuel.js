@@ -4,6 +4,22 @@ const { BadRequestError } = require("../utils/request");
 exports.validateGetCarsFuel = (req, res, next) => {
     const validateQuery = z.object({
         type: z.string().optional().nullable(),
+        price: z.string().optional().transform((val) => {
+            if (!val) return undefined; // Jika tidak ada nilai, biarkan undefined
+            const parsed = parseFloat(val);
+            if (isNaN(parsed)) {
+                throw new Error('Price must be a valid float');
+            }
+            return parsed;
+        }),
+        octan_rating: z.string().optional().transform((val) => {
+            if (!val) return undefined; // Jika tidak ada nilai, biarkan undefined
+            const parsed = parseInt(val, 10);
+            if (isNaN(parsed)) {
+                throw new Error('Octan rating must be a valid integer');
+            }
+            return parsed;
+        })
     });
 
     const resultValidateQuery = validateQuery.safeParse(req.query);

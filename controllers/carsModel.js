@@ -1,9 +1,10 @@
-const carsFuelService = require("../services/carsModel");
+const carsModelService = require("../services/carsModel");
 const { successResponse } = require("../utils/response");
 
 exports.getCarsModel = async (req, res, next) => {
     const data = await carsModelService.getCarsModel(
-        req.query?.type
+        req.query?.type,
+        req.query?.year
     );
     successResponse(res, data);
 }
