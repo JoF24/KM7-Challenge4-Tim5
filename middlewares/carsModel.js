@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { getModelById } = require('../controllers/modelsController');
+const { getModelById } = require('../controllers/carsModel');
 const { NotFoundError } = require('../utils/request');
 
 const modelIdSchema = z.number({
@@ -26,6 +26,7 @@ exports.validateGetModelById = (req, res, next) => {
 
 exports.validateCreateModel = (req, res, next) => {
     try {
+        req.body.year = parseInt(req.body.year);
         modelCreateSchema.parse(req.body); // Parse and validate the request body for model creation
         next();
     } catch (error) {
@@ -35,6 +36,7 @@ exports.validateCreateModel = (req, res, next) => {
 
 exports.validateUpdateModel = (req, res, next) => {
     try {
+        req.body.year = parseInt(req.body.year);
         modelUpdateSchema.parse(req.body); // Parse and validate the request body for model update
         next();
     } catch (error) {
