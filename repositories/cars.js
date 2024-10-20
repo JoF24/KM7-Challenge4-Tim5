@@ -4,11 +4,42 @@ const { NotFoundError } = require("../utils/request");
 
 const prisma = new PrismaClient();
 
+exports.getAllCars = async (plate, manufacture_id, model_id, rentPerDay, capacity, description, availableAt, transmission_id, available,type_id, year, options, specs, fuel_id) => {
+    const searchedCars = await prisma.cars.findMany({
+        where: {
+            plate : plate,
+            manufacture_id : manufacture_id,
+            model_id : model_id,
+            rentPerDay : rentPerDay,
+            capacity : capacity,
+            description : description,
+            availableAt : availableAt,
+            transmission_id : transmission_id,
+            available : available,
+            type_id : type_id,
+            year : year,
+            options : options,
+            specs : specs,
+            fuel_id : fuel_id
+        }
+    });
+
+    const serializedCars = JSONBigInt.stringify(searchedCars);
+    return JSONBigInt.parse(serializedCars);
+}
+
 exports.getCarById = async (id) => {
     const searchedCarById = await prisma.cars.findUnique({
         where: {
             id: id,
-        }
+        },
+        include: {
+            manufacture: true,
+            model: true,
+            transmission: true,
+            type: true,
+            fuel: true,
+        },
     });
 
     if (!searchedCarById) {
